@@ -163,43 +163,61 @@ class FixedRandom:
 
 class Stack:
     "A container with a last-in-first-out (LIFO) queuing policy."
+    def __init__(self,item=None):
+        if item == None: self.list = []
+        else: self.list = [item]
 
-    def __init__(self):
-        self.list = []
-
-    def push(self, item):
+    def push(self,item):
         "Push 'item' onto the stack"
         self.list.append(item)
 
     def pop(self):
         "Pop the most recently pushed item from the stack"
         return self.list.pop()
+    
+    def peek(self): return self.list[len(self.list-1)]
 
     def isEmpty(self):
         "Returns true if the stack is empty"
         return len(self.list) == 0
+    
+    def size(self):
+        return len(self.list)
+      
+    def getElements(self):
+        return self.list
 
 
 class Queue:
     "A container with a first-in-first-out (FIFO) queuing policy."
 
-    def __init__(self):
-        self.list = []
+    def __init__(self,item=None):
+        if item == None: self.list = []
+        else: self.list = [item]
 
-    def push(self, item):
+    def enqueue(self,item):
         "Enqueue the 'item' into the queue"
-        self.list.insert(0, item)
+        self.list.insert(0,item)
 
-    def pop(self):
+    def dequeue(self):
         """
-        Dequeue the earliest enqueued item still in the queue. This
-        operation removes the item from the queue.
+          Dequeue the earliest enqueued item still in the queue. This
+          operation removes the item from the queue.
         """
         return self.list.pop()
+    
+    def peek(self):
+        """
+        Return the earliest enqueued item still in the queue.
+        """
+        return self.list[0]
 
     def isEmpty(self):
         "Returns true if the queue is empty"
         return len(self.list) == 0
+    
+    def size(self):
+        return len(self.list)
 
 
 class PriorityQueue:
