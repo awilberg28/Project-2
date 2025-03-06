@@ -28,7 +28,7 @@
 
 import mdp, util
 
-from learningAgents import ValueEstimationAgent
+from learningAgents import ReinforcementAgent, ValueEstimationAgent
 import collections
 
 class ValueIterationAgent(ValueEstimationAgent):
@@ -65,6 +65,16 @@ class ValueIterationAgent(ValueEstimationAgent):
           value iteration, V_k+1(...) depends on V_k(...)'s.
         """
         "*** YOUR CODE HERE ***"
+        for i in range(self.iterations):
+            states = self.mdp.getStates()
+            counter = util.Counter()
+            for state in states:
+                maxQ = float("-inf")
+                for action in self.mdp.getPossibleActions(state):
+                    q=self.computeQValueFromValues(state,action)
+                    if q>maxQ:maxQ=q
+                    counter[state]=maxQ
+            self.values=counter
 
     def getValue(self, state):
         """
@@ -78,8 +88,11 @@ class ValueIterationAgent(ValueEstimationAgent):
           value function stored in self.values.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
-
+        q = 0
+        if(self.mdp.isTerminal(state)):return q
+        for (s,p) in self.mdp.getTransitionStatesAndProbs(state,action):
+            q+=(p*(self.mdp.getReward(state,action,s)+self.discount*float(self.getValue(s))))
+        return q
     def computeActionFromValues(self, state):
         """
           The policy is the best action in the given state
@@ -90,7 +103,27 @@ class ValueIterationAgent(ValueEstimationAgent):
           terminal state, you should return None.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        if(self.mdp.isTerminal(state)):return None
+        maxQ = float("-inf")
+        best = None
+        for action in self.mdp.getPossibleActions(state):
+            newQ = self.getQValue(state,action)
+            if(newQ>maxQ):
+                maxQ=newQ
+                best=action
+        return best
+    
+    def move(self,action,state):
+        (x,y) = state
+        match action:
+            case 'north':
+                return (x,y+1)
+            case 'east':
+                return (x+1,y)
+            case 'south':
+                return (x,y-1)
+            case 'west':
+                return (x-1,y)
 
     def getPolicy(self, state):
         return self.computeActionFromValues(state)
