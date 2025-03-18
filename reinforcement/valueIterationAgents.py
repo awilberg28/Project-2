@@ -71,7 +71,7 @@ class ValueIterationAgent(ValueEstimationAgent):
             for state in states:
                 maxQ = float("-inf")
                 for action in self.mdp.getPossibleActions(state):
-                    q=self.computeQValueFromValues(state,action)
+                    q=self.getQValue(state,action)
                     if q>maxQ:maxQ=q
                     counter[state]=maxQ
             self.values=counter
@@ -93,6 +93,7 @@ class ValueIterationAgent(ValueEstimationAgent):
         for (s,p) in self.mdp.getTransitionStatesAndProbs(state,action):
             q+=(p*(self.mdp.getReward(state,action,s)+self.discount*float(self.getValue(s))))
         return q
+    
     def computeActionFromValues(self, state):
         """
           The policy is the best action in the given state
