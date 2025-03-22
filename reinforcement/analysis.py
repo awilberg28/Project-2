@@ -25,9 +25,10 @@ def question2a():
     """
     answerDiscount = 0.1
     answerNoise = 0
-    answerLivingReward = 0.1
+    answerLivingReward = 0
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
+    
 
 def question2b():
     """
@@ -35,17 +36,18 @@ def question2b():
     """
     answerDiscount = 0.1
     answerNoise = 0.1
-    answerLivingReward = 0.1
+    answerLivingReward = -0.1
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
+
 
 def question2c():
     """
       Prefer the distant exit (+10), risking the cliff (-10).
     """
-    answerDiscount = 0.1
+    answerDiscount = 1
     answerNoise = 0
-    answerLivingReward = 0.9
+    answerLivingReward = -0.4
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
@@ -53,9 +55,9 @@ def question2d():
     """
       Prefer the distant exit (+10), avoiding the cliff (-10).
     """
-    answerDiscount = 0.9
-    answerNoise = 0.1
-    answerLivingReward = 0.1
+    answerDiscount = 1
+    answerNoise = 0.5
+    answerLivingReward = -0.4
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
@@ -65,7 +67,7 @@ def question2e():
     """
     answerDiscount = 0
     answerNoise = 0
-    answerLivingReward = 0
+    answerLivingReward = 1
     return answerDiscount, answerNoise, answerLivingReward
     # If not possible, return 'NOT POSSIBLE'
 
