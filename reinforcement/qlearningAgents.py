@@ -55,6 +55,8 @@ class QLearningAgent(ReinforcementAgent):
           or the Q node value otherwise
         """
         "*** YOUR CODE HERE ***"
+        # no extra func needed since counter returns 0 for keys that don't exist yet
+        # return self.values[(state, action)] if (state, action) in self.values else 0.0
         return self.values[(state,action)]
 
     def computeValueFromQValues(self, state):
@@ -66,11 +68,15 @@ class QLearningAgent(ReinforcementAgent):
         """
         "*** YOUR CODE HERE ***"
         actions = self.getLegalActions(state)
-        if not actions:return 0.0
-        maxQ=float("-inf")
+        if not actions:
+          return 0.0
+        
+        maxQ = -math.inf
         for action in actions:
             newQ=self.getQValue(state,action)
-            if(newQ>maxQ):maxQ=newQ
+            if(newQ>maxQ):
+              # update maxq
+              maxQ=newQ
         return maxQ
 
     def computeActionFromQValues(self, state):
@@ -81,15 +87,17 @@ class QLearningAgent(ReinforcementAgent):
         """
         "*** YOUR CODE HERE ***"
         actions = self.getLegalActions(state)
-        best=None
+        bestAction=None
+        # as long as actions exist
         if actions:
-          q=float("-inf")
+          bestActionQValue=float("-inf")
+          # grab all the q values
           for action in actions:
             newQ=self.getQValue(state,action)
-            if(newQ>q):
-              q=newQ
-              best=action
-        return best
+            if(newQ>bestActionQValue):
+              bestActionQValue=newQ
+              bestAction=action
+        return bestAction
 
     def getAction(self, state):
         """
@@ -105,7 +113,9 @@ class QLearningAgent(ReinforcementAgent):
         legalActions = self.getLegalActions(state)
         "*** YOUR CODE HERE ***"
         if not legalActions:return None
-        if(util.flipCoin(self.epsilon)):return random.choice(legalActions)
+        # if the action is taken by the probabilities, then select an action with a choice.
+        if(util.flipCoin(self.epsilon)):
+          return random.choice(legalActions)
         return self.getPolicy(state)
 
     def update(self, state, action, nextState, reward: float):

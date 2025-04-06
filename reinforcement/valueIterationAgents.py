@@ -25,8 +25,7 @@
 # Student side autograding was added by Brad Miller, Nick Hay, and
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
-
-import mdp, util
+import mdp, util, math
 
 from learningAgents import ReinforcementAgent, ValueEstimationAgent
 import collections
@@ -88,11 +87,18 @@ class ValueIterationAgent(ValueEstimationAgent):
           value function stored in self.values.
         """
         "*** YOUR CODE HERE ***"
-        q = 0
-        if(not self.mdp.isTerminal(state)):
-            for (s,p) in self.mdp.getTransitionStatesAndProbs(state,action):
-                q+=(p*(self.mdp.getReward(state,action,s)+self.discount*float(self.getValue(s))))
-        return q
+        #initial case
+        qValue = 0
+        # if not terminal
+        if (not self.mdp.isTerminal(state)):
+            for (nextState, probability) in self.mdp.getTransitionStatesAndProbs(state=state,action=action):
+                # add rewards for the connected nextStates
+                reward = self.mdp.getReward(state, action, nextState)
+                qValue += probability*(reward + self.discount*float(self.values[nextState]))
+        return qValue
+        
+        
+        
     
     def computeActionFromValues(self, state):
         """
@@ -104,15 +110,25 @@ class ValueIterationAgent(ValueEstimationAgent):
           terminal state, you should return None.
         """
         "*** YOUR CODE HERE ***"
-        if(self.mdp.isTerminal(state)):return None
-        maxQ = float("-inf")
-        best = None
-        for action in self.mdp.getPossibleActions(state):
-            newQ = self.getQValue(state,action)
-            if(newQ>maxQ):
-                maxQ=newQ
-                best=action
-        return best
+        # terminating case : if the state is terminal, return no action
+        if(self.mdp.isTerminal(state)):
+            return None
+        
+        #initialize minimum value
+        maxQ = -math.inf
+        newQ = -math.inf
+        # initialize returned action
+        bestAction = None
+        actionList = self.mdp.getPossibleActions(state)
+        for action in actionList:
+            newQ = self.getQValue(state, action)
+            if (newQ>maxQ):
+                # new q value replaces max if large enough.
+                bestAction = action
+                maxQ = newQ
+        return bestAction
+        
+        
     
     def move(self,action,state):
         (x,y) = state
